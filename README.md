@@ -20,15 +20,18 @@ This is a bash script to "backup" mysql databases and configuration files.
 There are a few vars at the beginning of the script which might be useful to change:
 
 The backup directory, where the configuration/database files are stored is:
+
     BACKUP_DIR=.... 
 
 The files where mysql connect information is retrieved from is:
+
     backups=(
        '/etc/keystone/keystone.conf'
        .....
     )
 
 The configuration directories to be saved are:
+
     backup_configs=(
         '/etc/keystone'
         ...
