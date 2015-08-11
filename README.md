@@ -39,5 +39,5 @@ The configuration directories to be saved are:
 
 This is the really first version of the script and it only includes mysql databases.
 
-= Known Issues:
+### Known Issues:
 * The regular expression to extract the database parameters is quite simple, and needs to be heavily improved in order to be able to access more databases.
