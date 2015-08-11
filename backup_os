@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# Copyright 2014
+#
+# This file is part of FIWARE project.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+#
+# You may obtain a copy of the License at:
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# For those usages not covered by the Apache version 2.0 License please
+# contact with opensource@tid.es
+#
+# Autor: Jose Ignacio Carretero Guarde.
+#
+
+# Directory where backups are stored
+BACKUP_DIR=/tmp/Openstack_backup
+
+# config files where mysql databases are configured.
+backups=(
+   '/etc/keystone/keystone.conf'
+   '/etc/neutron/neutron.conf' 
+   '/etc/nova/nova.conf' 
+   '/etc/glance/glance-api.conf'
+   '/etc/cinder/cinder.conf'
+   '/etc/heat/heat.conf'
+)
+
+# Backup directories to be copied.
+backup_configs=(
+   '/etc/keystone'
+   '/etc/neutron'
+   '/etc/nova'
+   '/etc/glance'
+   '/etc/cinder'
+   '/etc/heat'
+   '/etc/ceilometer'
+)
+
+
+## Script itself
+backup_dir=$BACKUP_DIR"/"`date +%Y%m%d%H%M%S`
+mkdir -p $backup_dir
+
+for backup in ${backups[@]}; do
+  if [ -f $backup ] ; then
+      v=(`awk -F '=' '/^connection *= *mysql/ {print gensub( /( *mysql:\/\/)([a-zA-Z0-9]+)(:)([a-zA-Z0-9]+)(@)([a-zA-Z0-9\.]+)(\/)([a-zA-Z0-9]+)/,         "\\\\2 \\\\4 \\\\6 \\\\8","g",$2)}' $backup`)
+      db_user=${v[0]}
+      db_password=${v[1]}
+      db_host=${v[2]}
+      db_name=${v[3]}
+      echo "mysqldump -u "${db_user} "-p"${db_password} "-h"${db_host} ${db_name} ">" ${backup_dir}"/"${db_name}".sql"
+      mysqldump -u ${db_user} -p${db_password} -h${db_host} ${db_name} | gzip --stdout > ${backup_dir}"/"${db_name}".sql.gz"
+  else
+      echo  "WARN: No file found: $backup"
+  fi
+done
+
+for backup in ${backup_configs[@]}; do
+  echo cp -prf $backup $backup_dir
+  [ -d $backup ] && cp -prf $backup $backup_dir || echo "WARN: Can't copy $backup"
+done
