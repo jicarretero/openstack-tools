@@ -1,7 +1,7 @@
 # openstack-tools
 Some easy tools to interact or do things with openstack.
 
-simple_token.py
+## simple_token.py
 ----------------
 Once set the variables "OS_USERNAME", "OS_PASSWORD" and "OS_AUTH_URL" it gets one token for each Tenant. The response is given in 
 pairs:
@@ -11,7 +11,7 @@ pairs:
 
 This script uses http requests. It is known to work in Juno version
 
-backup_os
+## backup_os
 ----------
 This is a bash script to "backup" mysql databases and configuration files. 
     
