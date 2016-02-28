@@ -67,6 +67,6 @@ There is a weird bug somewhere in or keystone installation and this script is to
 
 You can access the server with any curl:
 
- curl http://<host>:port
+ curl http://SERVER_HOST:4728
 
 
