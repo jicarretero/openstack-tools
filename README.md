@@ -59,3 +59,14 @@ You need to be able to resolve the compute nodes either using DNS or using /etc/
 * It is only known to work in Linux systems since virt-viewer is not too much ported.
 * You need to be able to resolve the compute nodes names (DNS or /etc/hosts)
 * You need to be able to connect as root (change in vview if other user are allowed) via ssh to the compute nodes.
+
+
+## keystone-simulation
+----------------------
+There is a weird bug somewhere in or keystone installation and this script is to debug the network connections and trace de responses. The script starts an HTTP server which responds every other time with HTTP/1.1 200 an HTTP/1.1 300 -- Only the 200 reaches the client. You simply need to run the script and it starts serving in port 4728. 
+
+You can access the server with any curl:
+
+ curl http://<host>:port
+
+
